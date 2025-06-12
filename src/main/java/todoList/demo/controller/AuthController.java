@@ -32,15 +32,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public User login(@RequestBody User user) {
         return userRepository.findByEmail(user.getEmail())
                 .map(existingUser -> {
                     if (passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-                        return "로그인 성공";
+                        return existingUser;
                     } else {
-                        return "비밀번호가 일치하지 않습니다.";
+                        return null;
                     }
                 })
-                .orElse("존재하지 않는 사용자입니다.");
+                .orElse(null);
     }
 }
